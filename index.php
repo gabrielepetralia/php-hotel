@@ -52,16 +52,38 @@ $hotels = [
   <title>PHP Hotel</title>
 </head>
 
-<body>
+<body class="bg-dark">
   <div class="container my-5">
-    <?php foreach ($hotels as $index => $hotel) : ?>
-      <h4>Hotel <?php echo $index += 1 ?>:</h4>
-      <ul>
-        <?php foreach ($hotel as $key => $value) : ?>
-          <li><?php echo $key ?> : <?php echo $value ?></li>
-        <?php endforeach ?>
-      </ul>
-    <?php endforeach ?>
+    <div class="gp-wrapper border shadow-white rounded-4 p-4">
+
+      <h1 class="text-white text-center py-4">Hotel Boolean</h1>
+
+      <table class="table p-4">
+        <thead>
+          <tr>
+            <?php foreach ($hotels[0] as $key => $value) : ?>
+              <th scope="col" class="text-white p-3"><?php echo strtoupper($key) ?></th>
+            <?php endforeach ?>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($hotels as $hotel) : ?>
+            <tr>
+              <?php foreach ($hotel as $key => $value) : ?>
+                <td class="text-white p-3">
+                  <?php if($key === "parking") {
+                    echo $value ? "Parcheggio disponibile" : "Parcheggio non disponibile";
+                  } else {
+                    echo $value;
+                  } ?>
+                </td>
+              <?php endforeach ?>
+            </tr>
+          <?php endforeach ?>
+        </tbody>
+      </table>
+
+    </div>
   </div>
 </body>
 
