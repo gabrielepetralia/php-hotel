@@ -36,6 +36,31 @@ $hotels = [
     'distance_to_center' => 50
   ],
 ];
+
+$hotelsFiltered = $hotels;
+
+if (isset($_POST['filter'])) {
+  $filter = $_POST['filter'];
+  
+  if ($filter === "all") {
+    $hotelsFiltered = $hotels;
+  }
+  
+  if ($filter === "parking-yes") {
+    $hotelsFiltered = [];
+    foreach($hotels as $hotel) {
+      if ($hotel["parking"]) $hotelsFiltered[] = $hotel;
+    }
+  }
+  
+  if ($filter === "parking-no") {
+    $hotelsFiltered = [];
+    foreach ($hotels as $hotel) {
+      if (!$hotel["parking"]) $hotelsFiltered[] = $hotel;
+    }
+  }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -58,7 +83,17 @@ $hotels = [
 
       <h1 class="text-white text-center py-4">Hotel Boolean</h1>
 
-      <table class="table p-4">
+      <form action="index.php" method="POST">
+        <select class="form-select w-25 d-inline me-1" name="filter">
+          <option value="all" selected>Tutti gli Hotel</option>
+          <option value="parking-yes">Hotel con parcheggio</option>
+          <option value="parking-no">Hotel senza parcheggio</option>
+        </select>
+
+        <button type="submit" class="btn btn-warning">Filtra</button>
+      </form>
+
+      <table class="table mt-3 p-4">
         <thead>
           <tr>
             <?php foreach ($hotels[0] as $key => $value) : ?>
@@ -67,12 +102,16 @@ $hotels = [
           </tr>
         </thead>
         <tbody>
-          <?php foreach ($hotels as $hotel) : ?>
+          <?php foreach ($hotelsFiltered as $hotel) : ?>
             <tr>
               <?php foreach ($hotel as $key => $value) : ?>
                 <td class="text-white p-3">
-                  <?php if($key === "parking") {
+                  <?php if ($key === "parking") {
                     echo $value ? "Parcheggio disponibile" : "Parcheggio non disponibile";
+                  } elseif ($key === "vote") {
+                    echo $value . " " . "&starf;";
+                  } elseif ($key === "distance_to_center") {
+                    echo $value . " " . "km";
                   } else {
                     echo $value;
                   } ?>
